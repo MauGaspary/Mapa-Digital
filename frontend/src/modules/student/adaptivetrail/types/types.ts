@@ -1,0 +1,92 @@
+import type { SubjectContext, TagContext } from '@/shared/types/common'
+import type { QuestionFlowPayload } from '@/modules/student/shared/types/types'
+
+export type { SummaryMetric, StudentTask } from '@/shared/types/common'
+
+export interface Trail {
+  id: string
+  name: string
+  description: string
+  subject?: SubjectContext
+  steps: number
+  completed: number
+  progress: number
+  timeEstimate: string | null
+}
+
+export interface SubjectGroup {
+  subjectId: string
+  subject?: SubjectContext
+  trails: Trail[]
+  averageProgress: number
+}
+
+export interface FilterOption {
+  label: string
+  value: string
+  subject: TagContext | null
+}
+
+export type AdaptiveTrailStepKind = 'video' | 'text' | 'question'
+export type AdaptiveTrailStepStatus = 'available' | 'completed' | 'locked'
+
+export type AdaptiveTrailQuestion = QuestionFlowPayload
+
+export interface AdaptiveTrailSubStep {
+  order: number
+  description: string
+  duration?: string
+  id: string
+  itemId?: string
+  itemIds?: string[]
+  kind: AdaptiveTrailStepKind
+  lockReason?: string
+  questions: AdaptiveTrailQuestion[]
+  status: AdaptiveTrailStepStatus
+  title: string
+}
+
+export interface AdaptiveTrailStep {
+  description?: string
+  id: string
+  lockReason?: string
+  order: number
+  status: AdaptiveTrailStepStatus
+  subSteps: AdaptiveTrailSubStep[]
+  title: string
+}
+
+export interface AdaptiveTrailSession {
+  completedSteps: number
+  description: string
+  id: string
+  levelLabel: string
+  progress: number
+  steps: AdaptiveTrailStep[]
+  subject: SubjectContext
+  timeEstimate: string
+  title: string
+}
+
+export interface RecommendedContent {
+  id: string
+  title: string
+  description: string
+  kind: 'video' | 'text'
+}
+
+export interface TrailStepCompletionResult {
+  stepTitle: string
+  correct: number
+  total: number
+  subject: SubjectContext
+  trailTitle: string
+  recommendedTrails: Array<{
+    id: string
+    name: string
+    subject?: SubjectContext
+    steps: number
+    timeEstimate: string
+  }>
+  recommendedContent: RecommendedContent[]
+}

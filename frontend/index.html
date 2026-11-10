@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mapa Digital: base frontend organizada para autenticação, dashboards por perfil e expansão do produto."
+    />
+    <title>Mapa Digital</title>
+    <script>
+      ;(function () {
+        try {
+          var preference = localStorage.getItem('mapa-digital.theme.mode')
+          var mode =
+            preference === 'dark'
+              ? 'dark'
+              : preference === 'light'
+                ? 'light'
+                : window.matchMedia('(prefers-color-scheme: dark)').matches
+                  ? 'dark'
+                  : 'light'
+
+          if (mode === 'dark') {
+            document.documentElement.classList.add('dark')
+            document.documentElement.dataset.theme = 'dark'
+          }
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
