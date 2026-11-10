@@ -8,12 +8,12 @@ Projeto desenvolvido na **AGES (Agência Experimental de Engenharia de Software)
 
 ## Estrutura do repositório
 
-Este repositório junta os repositórios originais do projeto, com o histórico de commits preservado:
+Este repositório junta os repositórios originais do projeto, com o histórico de commits preservado. O frontend veio do GitLab da AGES e o backend do [GitHub da organização](https://github.com/Mapa-Digital-Ages), onde ele foi desenvolvido:
 
 | Pasta | Descrição | Stack |
 |---|---|---|
 | [`frontend/`](frontend) | Aplicação web com as áreas de aluno, responsáveis, escola, empresa e administração | TypeScript, React, Vite, Material UI, Jest, Cypress e Playwright |
-| [`backend/`](backend) | Estrutura inicial da API (versão disponível no GitLab da AGES) | Python 3.12, FastAPI, PostgreSQL, Docker, uv |
+| [`backend/`](backend) | API REST com autenticação JWT, cadastro e aprovação de usuários, conteúdos, trilhas, uploads e geração de conteúdo por IA | Python 3.12, FastAPI, SQLAlchemy (async), PostgreSQL, Google Gemini, AWS S3, Docker, uv |
 
 ## Funcionalidades
 
@@ -28,9 +28,10 @@ O sistema é multiusuário, com uma área para cada perfil:
 ## Arquitetura
 
 - **Frontend:** organizado por domínios em `src/modules/` (um módulo por perfil de usuário), com a infraestrutura de UI em `src/app/` e uma biblioteca interna em `src/shared/`. As telas foram desenhadas no Figma com base no Material UI.
-- **Backend:** API em FastAPI com validação via Pydantic e documentação automática (Swagger/OpenAPI).
+- **Backend:** API assíncrona em FastAPI, organizada em `routes` → `services` → `models`, com validação via Pydantic, documentação automática (Swagger/OpenAPI), rate limiting e recuperação de senha por e-mail. As trilhas adaptativas são geradas com o **Google Gemini**, e os arquivos enviados ficam no **AWS S3**.
+- **CI/CD:** GitHub Actions para lint e testes (`ci.yml`) e deploy (`deploy.yml`).
 - **Infraestrutura (AWS):**
-  - uma instância EC2 `t3.medium` com os containers Docker do backend e do PostgreSQL, além do GitLab Runner;
+  - uma instância EC2 `t3.medium` com os containers Docker do backend e do PostgreSQL;
   - um bucket S3 com o frontend estático;
   - o CloudFront como CDN, com HTTPS.
 
@@ -52,6 +53,7 @@ npm run test:e2e   # testes E2E (Playwright)
 
 ```sh
 cd backend
+cp .env-example .env   # preencha as variáveis
 docker compose up --build
 ```
 
@@ -59,7 +61,7 @@ Os READMEs de [`frontend/`](frontend) e [`backend/`](backend) têm instruções 
 
 ## Branches
 
-A branch `main` tem o estado final de cada repositório. As demais branches originais foram mantidas com o nome da pasta como prefixo, por exemplo `frontend/develop`.
+A branch `main` tem o estado final de cada repositório. As demais branches originais foram mantidas com o nome da pasta como prefixo, por exemplo `frontend/develop` e `backend/dev`.
 
 ## Equipe
 
@@ -67,7 +69,7 @@ A branch `main` tem o estado final de cada repositório. As demais branches orig
 
 | Nível | Integrantes |
 |---|---|
-| AGES I | Antonio Augusto Fell Dal Bem, Arthur de Oliveira Ferreira, Doulas Lisboa Silvano, Isabella Martins Gernster, Lorenzo Santos de Souza de Moraes Bueno |
+| AGES I | Antonio Augusto Fell Dal Bem, Arthur de Oliveira Ferreira, Douglas Lisboa Silvano, Isabella Martins Gernster, Lorenzo Santos de Souza de Moraes Bueno |
 | AGES II | Felipe Prunes Rambor, Maria Eduarda Souza Melloni |
 | AGES III | Adrielle Dornelles Dewes, Guilherme Melos Vieira, Gustavo Caldeira da Mesquita, Murilo Machado da Silva, Nicolas Fonseca Docolas |
 | AGES IV | Ana Luiza Fraga Romanini, Lara Alves Kunrath Padilha, Léo Falcao Vieira Furtado, Maurício Pessoa de Mello Gaspary |
