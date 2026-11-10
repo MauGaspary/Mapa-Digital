@@ -1,0 +1,30 @@
+@BaseUrl = http://localhost:8000/api
+
+### Register
+POST {{BaseUrl}}/register/responsavel
+Content-Type: application/json
+
+{
+    "name": "user12",
+    "email": "user12@example.com",
+    "password": "securepassword123"
+}
+
+### Register
+POST {{BaseUrl}}/register/aluno
+Content-Type: application/json
+
+{
+    "name": "user12",
+    "email": "user112@example.com",
+    "password": "securepassword123"
+}
+
+### Login
+POST {{BaseUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "user112@example.com",
+    "password": "securepassword123"
+}
